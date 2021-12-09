@@ -2,11 +2,21 @@ const SICCOR = 'siccor'
 const ROCK = 'rock'
 const PAPER = 'paper'
 
+const compareLogicWins = {
+  rock: SICCOR,
+  paper: ROCK,
+  siccor: PAPER
+}
+
 const userBtns = document.querySelectorAll('.user_btns button');
 const computer_btns = document.querySelectorAll('.computer_btns button');
 const result = document.querySelector('#result');
+const reset = document.querySelector('#reset');
 let user_select = null
 let computer_select = null
+
+reset.addEventListener('click', clearAllBtn)
+
 
 const c_rock = document.getElementById('c_rock');
 const c_paper = document.getElementById('c_paper');
@@ -18,6 +28,8 @@ function clearAllBtn(){
 
   const allBtn = document.querySelectorAll('button');
   allBtn.forEach(v=> v.classList.remove('selected'))
+
+  result.innerText = ""
 
 }
 
@@ -48,21 +60,9 @@ userBtns.forEach((current_btn) => {
 
 function compare(userSelected, compSelected){
 
-  if(userSelected == ROCK){
-    if(compSelected == SICCOR) return 1
-    if(compSelected == ROCK) return 0
-    if(compSelected == PAPER) return -1
-  }
-  if(userSelected == PAPER){
-    if(compSelected == SICCOR) return -1
-    if(compSelected == ROCK) return 1
-    if(compSelected == PAPER) return 0
-  }
-  if(userSelected == SICCOR){
-    if(compSelected == SICCOR) return 0
-    if(compSelected == ROCK) return -1
-    if(compSelected == PAPER) return 1
-  }
+  if(compareLogicWins[userSelected] == compSelected) return 1
+  if(compSelected == userSelected) return 0
+  return -1
 }
 
 function displayResult(value) {
