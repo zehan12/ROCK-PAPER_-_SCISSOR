@@ -1,0 +1,9 @@
+.user_btns {
+  /* background-color: red; */
+      padding: 75px  0;
+
+}
+
+.selected{
+  background-color: aquamarine;
+}
