@@ -1,12 +1,25 @@
-const user_rock = document.getElementById('u_rock');
-const user_paper = document.getElementById('u_paper');
-const user_siccor = document.getElementById('u_siccor');
+const SICCOR = 'siccor'
+const ROCK = 'rock'
+const PAPER = 'paper'
+
+const userBtns = document.querySelectorAll('.user_btns button');
+const computer_btns = document.querySelectorAll('.computer_btns button');
+const result = document.querySelector('#result');
+let user_select = null
+let computer_select = null
 
 const c_rock = document.getElementById('c_rock');
 const c_paper = document.getElementById('c_paper');
 const c_siccor = document.getElementById('c_siccor');
 
-const computer_btns = [c_rock, c_paper, c_siccor]
+function clearAllBtn(){
+  user_select = null
+  computer_select = null
+
+  const allBtn = document.querySelectorAll('button');
+  allBtn.forEach(v=> v.classList.remove('selected'))
+
+}
 
 function random(){
   return Math.floor(Math.random() * 3);
@@ -14,55 +27,54 @@ function random(){
 
 function selectForComputer(){
   let btn = computer_btns[random()]
-
-
-
-    if(btn.classList.contains('selected')){
-      btn.classList.remove('selected')
-    }else{
       btn.classList.add('selected')
-      // btn.classList.remove('selected')
-      // btn.classList.remove('selected')
-    }
+      computer_select = btn.id
+
+      const val = compare(user_select,computer_select)
+
+      result.innerText = displayResult(val)
 }
 
-user_rock.addEventListener('click', () => {
-
-  if(user_rock.classList.contains('selected')){
-    user_rock.classList.remove('selected')
-
-  }else{
-    user_rock.classList.add('selected')
-    user_paper.classList.remove('selected')
-    user_siccor.classList.remove('selected')
-    selectForComputer()
-  }
+userBtns.forEach((current_btn) => {
+  current_btn.addEventListener('click', () => {
+    clearAllBtn()
+    current_btn.classList.add('selected')
+    user_select = current_btn.id
+    setTimeout(() => {
+      selectForComputer()
+    },500 );
+  })
 })
 
-user_paper.addEventListener('click', () => {
+function compare(userSelected, compSelected){
 
- let classes = user_paper.getAttribute('class')
-console.log(classes);
-  if(classes.split(" ").includes('selected')){
-    user_paper.classList.remove('selected')
-  }else{
-    user_rock.classList.remove('selected')
-    user_paper.classList.add('selected')
-    user_siccor.classList.remove('selected')
-    selectForComputer()
+  if(userSelected == ROCK){
+    if(compSelected == SICCOR) return 1
+    if(compSelected == ROCK) return 0
+    if(compSelected == PAPER) return -1
   }
-})
-
-user_siccor.addEventListener('click', () => {
-
-  if(user_siccor.classList.contains('selected')){
-    user_siccor.classList.remove('selected')
-  }else{
-    user_siccor.classList.add('selected')
-    user_rock.classList.remove('selected')
-    user_paper.classList.remove('selected')
-    selectForComputer()
+  if(userSelected == PAPER){
+    if(compSelected == SICCOR) return -1
+    if(compSelected == ROCK) return 1
+    if(compSelected == PAPER) return 0
   }
-})
+  if(userSelected == SICCOR){
+    if(compSelected == SICCOR) return 0
+    if(compSelected == ROCK) return -1
+    if(compSelected == PAPER) return 1
+  }
+}
+
+function displayResult(value) {
+  if(value == 1) {
+    return "YOU WIN"
+  }
+  if(value == -1) {
+    return "YOU LOOSE"
+  }
+  if(value == 0) {
+    return "TIE"
+  }
+}
 
 
